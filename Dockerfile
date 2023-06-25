@@ -1,4 +1,8 @@
-# Basic nginx dockerfile starting with Ubuntu 20.04
-FROM ubuntu:22.04
-RUN apt-get -y update
-RUN apt-get -y install nginx
+FROM caddy:builder AS builder
+
+RUN caddy-builder \
+    github.com/caddy-dns/cloudflare
+
+FROM caddy:latest
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
